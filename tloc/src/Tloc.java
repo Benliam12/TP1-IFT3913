@@ -24,6 +24,7 @@ public class Tloc {
             }
             else{
                 System.out.println(file.getAbsolutePath());
+                System.out.println("SIZE: " + countLine(file));
             }
         }
         else{
@@ -34,15 +35,39 @@ public class Tloc {
 
     }
 
-    public int countLine(File f){
+    public static int countLine(File f){
         try {
             int total = 0;
             Scanner scanner = new Scanner(f);
+
+            //If this is true, it means we are in a multiline comment.
+            boolean multiline = false;
+
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 //Check if line it not just spaces.
                 if(line.trim().length() > 0){
-                    total++;
+                    //Check normal comment
+                    if(line.length() >=2)
+                    {
+                        if(line.trim().matches("^\\/\\**")){
+                            System.out.println("Start comment! - " +line.trim());
+                            multiline=true;
+                        }
+                        else if(line.trim().matches("\\*\\/")){
+                            System.out.println("Closing comment! - " + line.trim());
+                            multiline=false;
+                        }
+                        else
+                        {
+                            if(!multiline)
+                                total++;
+                        }
+                    }
+                    else
+                    {
+                        total++;
+                    }
                 }
             }
             return total;
