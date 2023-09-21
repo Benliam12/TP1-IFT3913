@@ -51,12 +51,14 @@ public class Tloc {
                     if(line.length() >=2)
                     {
                         if(line.trim().matches("^\\/\\**")){
-                            System.out.println("Start comment! - " +line.trim());
                             multiline=true;
                         }
                         else if(line.trim().matches("\\*\\/")){
-                            System.out.println("Closing comment! - " + line.trim());
                             multiline=false;
+                        }
+                        else if(line.trim().matches("^\\/\\/"))
+                        {
+
                         }
                         else
                         {

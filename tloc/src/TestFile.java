@@ -18,4 +18,12 @@ public class TestFile {
      *
      *
      */
+    public void haha(){
+        //
+        System.out.println("POGGIES");
+        /*
+        Another commented line
+         */
+        System.out.println("SOME MORE CODE");
+    }
 }
