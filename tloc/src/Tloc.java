@@ -9,7 +9,7 @@ public class Tloc {
 
         if(args.length != 1){
             // Should exit the program.
-            System.out.println("Vous devez fournir un chemin d'accès!");
+            System.out.println("Please provide a path!");
             exit(0);
         }
 
@@ -48,27 +48,16 @@ public class Tloc {
                 //Check if line it not just spaces.
                 if(line.trim().length() > 0){
                     //Check normal comment
-                    if(line.length() >=2)
-                    {
-                        if(line.trim().matches("^\\/\\**")){
-                            multiline=true;
-                        }
-                        else if(line.trim().matches("\\*\\/")){
-                            multiline=false;
-                        }
-                        else if(line.trim().matches("^\\/\\/"))
-                        {
-
-                        }
-                        else
-                        {
-                            if(!multiline)
-                                total++;
-                        }
+                    if(line.trim().matches("^\\/\\**")){
+                        multiline=true;
+                    }
+                    else if(line.trim().matches("\\*\\/")){
+                        multiline=false;
                     }
                     else
                     {
-                        total++;
+                        if(!multiline && !line.trim().matches("^\\/\\/"))
+                            total++;
                     }
                 }
             }
