@@ -14,7 +14,6 @@ public class Tloc {
         }
 
         File file = new File(args[0]);
-
         if(file.exists())
         {
             if(file.isDirectory()){
@@ -23,16 +22,13 @@ public class Tloc {
                 }
             }
             else{
-                System.out.println(file.getAbsolutePath());
-                System.out.println("SIZE: " + countLine(file));
+                System.out.println(countLine(file));
             }
         }
         else{
             System.out.println("File or directory does not exists!");
             exit(0);
         }
-
-
     }
 
     public static int countLine(File f){
@@ -54,8 +50,7 @@ public class Tloc {
                     else if(line.trim().matches("\\*\\/")){
                         multiline=false;
                     }
-                    else
-                    {
+                    else {
                         if(!multiline && !line.trim().matches("^\\/\\/"))
                             total++;
                     }
