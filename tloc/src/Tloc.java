@@ -17,9 +17,7 @@ public class Tloc {
         if(file.exists())
         {
             if(file.isDirectory()){
-                for(File f : file.listFiles()){
-                    System.out.println(f.getName());
-                }
+                System.out.println("Programs only supports single file.");
             }
             else{
                 System.out.println(countLine(file));
