@@ -49,7 +49,7 @@ public class Tloc {
                         multiline=false;
                     }
                     else {
-                        if(!multiline && !line.trim().matches("^\\/\\/"))
+                        if(!multiline && !line.trim().matches("^\\/\\/") && !line.trim().matches("\\/\\*(.)*\\*\\/"))
                             total++;
                     }
                 }
