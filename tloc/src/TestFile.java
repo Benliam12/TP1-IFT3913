@@ -3,17 +3,17 @@
  * This file, when pass into the TLoc program, should return 6.
  */
 public class TestFile {
+    /* dsadasdsa
     /*
     /*
-    /*
-    /* lksadjlkdsajsldkaj
+    /* *\ //lksadjlkdsajsldkaj
     /*
     /*
     /*
     /*
 
      */
-    /**
+    /** kisdjhfkjsdfh
     *
      * /
      * /
@@ -40,7 +40,7 @@ public class TestFile {
     public void haha(){
         //
         System.out.println("POGGIES");
-        /*
+        /*****************************************************
         Another commented line
 
 
