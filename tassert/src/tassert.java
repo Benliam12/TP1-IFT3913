@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.System.exit;
+
 /*
 * assert("assert(\"haha\")
 *
@@ -14,32 +15,8 @@ public class tassert {
     public static void main(String[] args){
         if(args.length != 1){
 
-            System.out.println();
-
-
-            Pattern pattern = Pattern.compile("\"((?:\\\\.|[^\"\\\\])*)\"");
-
-            for(String s : commentRemover(new File("src/TestTAssert.java"))){
-                Matcher matcher = pattern.matcher(s);
-
-                int index = 0;
-                StringBuilder builder = new StringBuilder();
-                while (matcher.find()) {
-                    String matchedString = matcher.group(1); // Extract the string between double quotes
-                    builder.append(s, index, matcher.start());
-                    builder.append("");
-                    index = matcher.end();
-                }
-
-                builder.append(s.substring(index));
-
-                System.out.println(builder.toString());
-
-            }
-
-
             // Should exit the program.
-            //System.out.println("Please provide a path!");
+            System.out.println("Please provide a path!");
             exit(0);
         }
 
@@ -50,7 +27,7 @@ public class tassert {
                 System.out.println("Programs only supports single file.");
             }
             else{
-                System.out.println(commentRemover(file));
+                System.out.println(countAssert(DoubleQuoteStringRemover(commentRemover(new File(args[0])))));
             }
         }
         else{
@@ -59,11 +36,48 @@ public class tassert {
         }
     }
 
-    public static int countAssert(File file){
+    public static int countAssert(ArrayList<String> target){
+        String[] targetFun = {"assertArrayEquals", "assertEquals", "assertNotEquals", "assertFalse", "assertNotNull", "assertNotSame", "assertNull", "assertSame", "assertThat", "assertThrows", "assertTrue", "fail"};
+        int count = 0;
+        for(String s: target){
+            //find match
+            boolean found = false;
+            for(String s2 : targetFun){
+                String regex = "( *(.+)[A-z]+\\.| +|)" + s2 + "\\((.*)";
+                if(s.matches(regex)){
+                    found=true;
+                    break;
+                }
+            }
+            if(found)
+                count++;
 
-        System.out.println
-                ();
-        return 0;
+        }
+
+
+
+        return count;
+    }
+
+    public static ArrayList<String> DoubleQuoteStringRemover(ArrayList<String> target){
+        Pattern pattern = Pattern.compile("\"((?:\\\\.|[^\"\\\\])*)\"");
+        ArrayList<String> output = new ArrayList<>();
+        for(String s : target){
+            Matcher matcher = pattern.matcher(s);
+
+            int index = 0;
+            StringBuilder builder = new StringBuilder();
+            while (matcher.find()) {
+                String matchedString = matcher.group(1); // Extract the string between double quotes
+                builder.append(s, index, matcher.start());
+                builder.append("\"\"");
+                index = matcher.end();
+            }
+
+            builder.append(s.substring(index));
+            output.add(builder.toString());
+        }
+        return output;
     }
 
     /**
