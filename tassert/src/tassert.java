@@ -99,7 +99,7 @@ public class tassert {
                 //Check if line it not just spaces.
                 if(line.trim().length() > 0){
                     //Check normal comment
-                    if(line.trim().matches("^\\/\\**")){
+                    if(line.trim().matches("^\\/\\*(.*)$") && !line.trim().matches("(.)*\\*\\/")){
                         multiline=true;
                     }
                     else if(line.trim().matches("\\*\\/")){
