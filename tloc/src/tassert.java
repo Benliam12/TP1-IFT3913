@@ -18,8 +18,6 @@ public class tassert {
 
         if(javaFile.exists() && !javaFile.isDirectory()){
             try(BufferedReader buffReader = new BufferedReader(new FileReader(javaFile))){
-
-                List<String> liste = getAllAssertMethodName();
                 int nbCodeLine = calculateTassert(buffReader);
                 System.out.println(nbCodeLine);
 

@@ -29,7 +29,7 @@ public class TlocLilou {
 
         while(line != null){
 
-            if(!line.contains("//")){
+            if(!line.contains("//") && !line.isEmpty()){
                 if(!line.contains("/*")){
                     if(!line.contains("*/")){
                         if(!isMultiLine){
