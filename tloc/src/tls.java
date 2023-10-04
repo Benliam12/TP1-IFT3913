@@ -23,13 +23,35 @@ public class tls {
 
         if(javaDirectory.exists() && javaDirectory.isDirectory()){
 
-            for(File javaFile : javaDirectory.listFiles()){
-                String csvInfo = getInfoFromFile(javaFile);
-                System.out.println(csvInfo);
+            readDirectory(javaDirectory);
 
+        }
+
+    }
+
+    public static void readDirectory(File javaDirectory) throws FileNotFoundException, ClassNotFoundException {
+
+        for(File file : javaDirectory.listFiles()){
+
+            if(file.isDirectory()){
+                readDirectory(file);
+            }
+            else if(getFileExtension(file.getAbsolutePath()).equalsIgnoreCase("java")){
+                String csvInfo = getInfoFromFile(file);
+                System.out.println(csvInfo);
             }
 
         }
+    }
+
+    //https://stackoverflow.com/questions/25298691/how-to-check-the-file-type-in-java
+    public static String getFileExtension(String fullName) {
+        if(fullName != null){
+            String fileName = new File(fullName).getName();
+            int dotIndex = fileName.lastIndexOf('.');
+            return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
+        }
+        return "";
 
     }
 
@@ -38,19 +60,15 @@ public class tls {
         String csvInfo = "";
 
 
-        String relativePath = "./" +javaFile.getName();
-        System.out.println(relativePath);
+        String relativePath = javaFile.getPath();
 
         String packageName = getPackageName(javaFile);
-        System.out.println(packageName);
 
         String className = javaFile.getName().replace(".java","");
-        System.out.println(className);
 
         int tloc = 0;
         try(BufferedReader buffReader = new BufferedReader(new FileReader(javaFile))){
             tloc = numberCodeLines(buffReader);
-            System.out.println(tloc);
 
         } catch (IOException e){
             e.printStackTrace();
@@ -59,17 +77,14 @@ public class tls {
         int tassert = 0;
         try(BufferedReader buffReader = new BufferedReader(new FileReader(javaFile))){
             tassert = calculateTassert(buffReader);
-            System.out.println(tassert);
 
         } catch (IOException e){
             e.printStackTrace();
         }
 
         float tcmp = calculateTcmp(tloc, tassert);
-        String tcmpFormat = String.format("%.2f", tcmp);
-        System.out.println(tcmp);
 
-        csvInfo = relativePath + ", " + packageName + ", " + className + ", " + tloc + ", " + tassert +", " + tcmpFormat;
+        csvInfo = relativePath + ", " + packageName + ", " + className + ", " + tloc + ", " + tassert +", " + tcmp;
 
 
 
@@ -96,6 +111,7 @@ public class tls {
                                 if(line.contains("package")){
                                     packageName = line.replace("package","").
                                             replace(";", "").trim();
+                                    break;
                                 }
 
 
@@ -209,7 +225,7 @@ public class tls {
             return tcmp;
         }
 
-        tcmp = (float) tloc / tassert;
+        tcmp = (float) Math.floor(tloc * 100f / tassert) / 100;
 
         return tcmp;
     }
