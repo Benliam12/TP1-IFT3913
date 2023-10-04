@@ -1,16 +1,16 @@
+import org.junit.Assert;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.System.exit;
 
-/*
-* assert("assert(\"haha\")
-*
-* */
 public class tassert {
     public static void main(String[] args){
         if(args.length != 1){
@@ -36,8 +36,20 @@ public class tassert {
         }
     }
 
+    public static List<String> getAllAssertMethodName(){
+        List<String> listAssertMethodName = new ArrayList<String>();
+        Method[] assertMethodsList = Assert.class.getMethods();
+        for (Method assertMethod : assertMethodsList) {
+            if(!listAssertMethodName.contains(assertMethod.getName())){
+                listAssertMethodName.add(assertMethod.getName());
+            }
+        }
+
+        return listAssertMethodName;
+    }
+
     public static int countAssert(ArrayList<String> target){
-        String[] targetFun = {"assertArrayEquals", "assertEquals", "assertNotEquals", "assertFalse", "assertNotNull", "assertNotSame", "assertNull", "assertSame", "assertThat", "assertThrows", "assertTrue", "fail"};
+        List<String> targetFun = getAllAssertMethodName();
         int count = 0;
         for(String s: target){
             //find match
@@ -53,8 +65,6 @@ public class tassert {
                 count++;
 
         }
-
-
 
         return count;
     }
@@ -87,7 +97,6 @@ public class tassert {
     public static ArrayList<String> commentRemover(File f){
 
         ArrayList<String> strings = new ArrayList<String>();
-
         try {
             Scanner scanner = new Scanner(f);
 
