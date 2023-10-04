@@ -44,39 +44,7 @@ public class TlocLilou {
                     isMultiLine = true;
                 }
             }
-
-//            if(line.contains("//")){
-//                isCommented = true;
-//            }
-//            else if(line.contains("/*")){
-//                isMultiLine = true;
-//            }
-//            else if(line.contains("*/")){
-//                isMultiLine = false;
-//            }
-//
-//            if(!isCommented && !isMultiLine){
-//                nbLines++;
-//            }
-
             line = buffReader.readLine();
-
-
-//            //Single Line Comment verification
-//            if(line.charAt(0) == '/' && line.charAt(1) == '/'){
-//                //This line is a comment
-//                isCommented = true;
-//            }
-//            //Multi Line Comment verification
-//            else if(line.charAt(0) == '/' && line.charAt(1) == '*'){
-//                isMultiLine = true;
-//            }
-//            else if(isMultiLine && line.charAt(line.length() -2) == '*' && line.charAt(line.length() -1) == '/') {
-//                isMultiLine = false;
-//            }
-//            if(!isCommented && !isMultiLine){
-//                nbLines++;
-//            }
 
         }
         return nbLines;
