@@ -14,25 +14,19 @@ public class Tloc {
         }
 
         File file = new File(args[0]);
-
         if(file.exists())
         {
             if(file.isDirectory()){
-                for(File f : file.listFiles()){
-                    System.out.println(f.getName());
-                }
+                System.out.println("Programs only supports single file.");
             }
             else{
-                System.out.println(file.getAbsolutePath());
-                System.out.println("SIZE: " + countLine(file));
+                System.out.println(countLine(file));
             }
         }
         else{
             System.out.println("File or directory does not exists!");
             exit(0);
         }
-
-
     }
 
     public static int countLine(File f){
@@ -48,15 +42,14 @@ public class Tloc {
                 //Check if line it not just spaces.
                 if(line.trim().length() > 0){
                     //Check normal comment
-                    if(line.trim().matches("^\\/\\**")){
+                    if(line.trim().matches("^\\/\\*(.*)$") && !line.trim().matches("(.)*\\*\\/")){
                         multiline=true;
                     }
                     else if(line.trim().matches("\\*\\/")){
                         multiline=false;
                     }
-                    else
-                    {
-                        if(!multiline && !line.trim().matches("^\\/\\/"))
+                    else {
+                        if(!multiline && !line.trim().matches("^\\/\\/") && !line.trim().matches("\\/\\*(.)*\\*\\/"))
                             total++;
                     }
                 }
