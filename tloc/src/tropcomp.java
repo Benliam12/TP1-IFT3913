@@ -9,9 +9,9 @@ public class tropcomp {
 
     public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException {
 
-        if(args.length != 1){
+        if(args.length != 2){
             System.out.println("Vous devez entrer en paramètre le chemin d'accès d'un dossier qui contient" +
-                    "du code test java organisé en paquet.");
+                    "du code test java organisé en paquet ainsi que le seuil.");
             System.exit(0);
         }
 
@@ -21,13 +21,20 @@ public class tropcomp {
 
         if(javaDirectory.exists() && javaDirectory.isDirectory()){
 
-            readDirectory(javaDirectory);
+            ArrayList<MetricJavaClass> listJavaClassMetrics = readDirectory(javaDirectory);
+            findSuspectClass(listJavaClassMetrics, Integer.parseInt(args[1]));
 
         }
 
     }
 
-    public static void readDirectory(File javaDirectory) throws FileNotFoundException, ClassNotFoundException {
+    public static void findSuspectClass(ArrayList<MetricJavaClass> listJavaClassMetrics, int seuil){
+
+    }
+
+    public static ArrayList<MetricJavaClass> readDirectory(File javaDirectory) throws FileNotFoundException, ClassNotFoundException {
+
+        ArrayList<MetricJavaClass> listJavaClassMetrics = new ArrayList<MetricJavaClass>();
 
         for(File file : javaDirectory.listFiles()){
 
@@ -35,11 +42,12 @@ public class tropcomp {
                 readDirectory(file);
             }
             else if(getFileExtension(file.getAbsolutePath()).equalsIgnoreCase("java")){
-                String csvInfo = getInfoFromFile(file);
-                System.out.println(csvInfo);
+                listJavaClassMetrics.add(getInfoFromFile(file));
             }
 
         }
+
+        return listJavaClassMetrics;
     }
 
     //https://stackoverflow.com/questions/25298691/how-to-check-the-file-type-in-java
@@ -53,14 +61,8 @@ public class tropcomp {
 
     }
 
-    public static String getInfoFromFile(File javaFile) throws ClassNotFoundException, FileNotFoundException {
+    public static MetricJavaClass getInfoFromFile(File javaFile) throws ClassNotFoundException, FileNotFoundException {
 
-        String csvInfo = "";
-
-
-        String relativePath = javaFile.getPath();
-
-        String packageName = getPackageName(javaFile);
 
         String className = javaFile.getName().replace(".java","");
 
@@ -82,11 +84,9 @@ public class tropcomp {
 
         float tcmp = calculateTcmp(tloc, tassert);
 
-        csvInfo = relativePath + ", " + packageName + ", " + className + ", " + tloc + ", " + tassert +", " + tcmp;
+        MetricJavaClass javaClass = new MetricJavaClass(tloc, tcmp, className);
 
-
-
-        return csvInfo;
+        return javaClass;
 
     }
 
