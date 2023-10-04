@@ -29,6 +29,8 @@ public class tropcomp {
     }
 
     public static void findSuspectClass(ArrayList<MetricJavaClass> listJavaClassMetrics, int seuil){
+        ArrayList<MetricJavaClass> listMetricJavaClassTlocSorted = new ArrayList<MetricJavaClass>();
+        int nbvaluesList = listJavaClassMetrics.size();
 
     }
 
