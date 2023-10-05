@@ -20,11 +20,11 @@ jobs:
       with:
         distribution: 'zulu' # See 'Supported distributions' for available options
         java-version: '17'
-
+        
     - name: Clone JFreeChart repository at the same level
       run: git clone https://github.com/jfree/jfreechart.git ../jfreechart-master
       
-      - name: Download JUnit JAR files
+    - name: Download JUnit JAR files
       run: |
         mkdir -p lib
         curl -L -o lib/junit-4.13.2.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
