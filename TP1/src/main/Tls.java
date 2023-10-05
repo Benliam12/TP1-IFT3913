@@ -73,9 +73,6 @@ public class Tls {
                     tcmp.add(info.getTcmp());
                     fileData.add(info);
                 }
-                else{
-                    System.out.println(info.toString());
-                }
             }
         }
     }
