@@ -2,7 +2,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Struct;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.exit;
 
@@ -81,24 +83,31 @@ public class Tls {
             System.out.println("File or directory does not exists!");
             exit(0);
         }
-
     }
 
     public static void tls(File f, ArrayList<String> output){
+        tls(f, output, new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+    }
+
+    public static void tls(File f, ArrayList<String> output,ArrayList<FileData> fileData, ArrayList<Integer> tloc, ArrayList<Float> tcmp){
         if(f.isDirectory()){
             for(String s: f.list()){
-                tls(new File(f.getPath() + "/" + s), output);
+                tls(new File(f.getPath() + "/" + s), output,fileData, tloc, tcmp);
             }
         }
         else{
             //Process each file that was found.
             if(f.getName().matches("^(.)*\\.java$")){
-                output.add(getFileInfo(f));
+                FileData info = getFileInfo(f);
+                tloc.add(info.getTloc());
+                tcmp.add(info.getTcmp());
+                fileData.add(info);
+                output.add(info.toString());
             }
         }
     }
 
-    public static String getFileInfo(File f){
+    public static FileData getFileInfo(File f){
         ArrayList<String> cleanCode = Tloc.commentRemover(f);
         String csvInfo = "";
         String relativePath = f.getPath();
@@ -108,8 +117,7 @@ public class Tls {
         int tloc = cleanCode.size();
         int tassert = Tassert.countAssert(cleanCode);
         float tcmp = (float) Math.floor(100f * tloc/tassert) / 100f;
-        csvInfo = relativePath + ", " + packageName + ", " + className + ", " + tloc + ", " + tassert +", " + tcmp;
-        return csvInfo;
+        return new FileData(relativePath,packageName,className,tloc,tassert,tcmp);
     }
 
     public static String getPackageName(ArrayList<String> fileCleanData){
@@ -121,4 +129,6 @@ public class Tls {
         }
         return null;
     }
+
+
 }

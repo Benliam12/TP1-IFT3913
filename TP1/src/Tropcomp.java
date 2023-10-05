@@ -2,11 +2,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import static java.lang.System.exit;
 
-public class Tls {
+public class Tropcomp {
 
     public static void main(String[] args){
         if(args.length < 1){
@@ -16,6 +19,9 @@ public class Tls {
         }
         String path = ".";
         String outputPath = null;
+
+        float seuil = 0.10f;
+
         if(args.length == 1) {
             path = args[0];
         }else if(args.length == 3){
@@ -38,7 +44,22 @@ public class Tls {
         ArrayList<String> data = new ArrayList<>();
         if(file.exists()) {
             System.out.println("Scanning the files...");
-            tls(file,data);
+
+            ArrayList<Integer> tloc = new ArrayList<>();
+            ArrayList<Float> tcmp = new ArrayList<>();
+            ArrayList<FileData> files = new ArrayList<>();
+            Tls.tls(file,data,files,tloc,tcmp);
+
+            Collections.sort(tloc);
+            Collections.sort(tcmp);
+
+            int seulTloc = tloc.get((int) Math.floor((1-seuil)*tloc.size()));
+            float seultcmp = tcmp.get((int) Math.floor((1-seuil)*tcmp.size()));
+
+            System.out.println("TLOC : "+ seulTloc + " - TCMP: "+ seultcmp);
+
+            ArrayList<FileData> tropcompFile = GetComp(files,seulTloc,seultcmp);
+
             if(outputPath != null){
                 File f = new File(outputPath);
                 if(f.isDirectory()){
@@ -58,8 +79,8 @@ public class Tls {
                     FileWriter fileWriter = new FileWriter(f);
                     BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-                    for (String line : data) {
-                        bufferedWriter.write(line);
+                    for (FileData fileData : tropcompFile) {
+                        bufferedWriter.write(fileData.toString());
                         bufferedWriter.newLine();
                     }
                     bufferedWriter.close();
@@ -73,52 +94,26 @@ public class Tls {
 
             }
             else{
-                for(String s: data)
-                    System.out.println(s);
+                for (FileData fileData : tropcompFile)
+                    System.out.println(fileData.toString());
             }
         }
         else{
             System.out.println("File or directory does not exists!");
             exit(0);
         }
-
     }
 
-    public static void tls(File f, ArrayList<String> output){
-        if(f.isDirectory()){
-            for(String s: f.list()){
-                tls(new File(f.getPath() + "/" + s), output);
+    public static ArrayList<FileData> GetComp(ArrayList<FileData> input, int tloc, float tcmp){
+
+        ArrayList<FileData> output = new ArrayList<>();
+
+        for(FileData file: input){
+            if(file.getTloc() > tloc && file.getTcmp() > tcmp){
+                output.add(file);
             }
         }
-        else{
-            //Process each file that was found.
-            if(f.getName().matches("^(.)*\\.java$")){
-                output.add(getFileInfo(f));
-            }
-        }
-    }
 
-    public static String getFileInfo(File f){
-        ArrayList<String> cleanCode = Tloc.commentRemover(f);
-        String csvInfo = "";
-        String relativePath = f.getPath();
-        String packageName = getPackageName(cleanCode);
-        String className = f.getName().replace(".java","");
-
-        int tloc = cleanCode.size();
-        int tassert = Tassert.countAssert(cleanCode);
-        float tcmp = (float) Math.floor(100f * tloc/tassert) / 100f;
-        csvInfo = relativePath + ", " + packageName + ", " + className + ", " + tloc + ", " + tassert +", " + tcmp;
-        return csvInfo;
-    }
-
-    public static String getPackageName(ArrayList<String> fileCleanData){
-        for(String s: fileCleanData){
-            if(s.trim().matches("package (.*)")){
-                return s.replace("package","").
-                        replace(";", "").trim();
-            }
-        }
-        return null;
+        return output;
     }
 }
