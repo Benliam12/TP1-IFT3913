@@ -1,0 +1,14 @@
+Lilou Blanchette matricule: 20188851
+William D'Anjou matricule: 20188213
+
+L’heuristique de tropcomp, semble-t-elle de vraiment trouver du code de test trop complexe?
+Réponse:
+Il est difficile de donner une conclusion à ce sujet, car le projet utilisé, soit JFreeChart, est un projet qui a mainte fois été révisé et corrigé.
+Notre échantillion est très petit, car ce n'est qu'avec un seuil de 10% que nous trouvons un dossier dit complexe.
+De plus, la métrique utilisé ne donne pas nécessairement du code complexe, car le dossier à plusieurs lignes de définition de variables et il n'y a pas d'opérations complexes.
+Le nombre de ligne par rapport au nombre d'assertion ne donne pas nécessairement une bonne indication à savoir si le code est complexe ou non.
+
+Comment pourrions nous l’améliorer?
+Réponse:
+Si nous gardons la même métrique, un appel de fonction qui prend plusieurs ligne devrait être compté comme une seule ligne, car ceci est fait afin que le code soit plus claire
+et afin que cela ne dépasse pas un certains nombre caractères. Cela n'a donc pas d'effet sur la complexité du code.
