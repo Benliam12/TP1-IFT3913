@@ -38,5 +38,5 @@ jobs:
       run: javac -cp .:lib/*:TP1/src TP1/src/test/*.java
 
     - name: Run JUnit tests
-      run: java -cp .:src/main:lib/*:src/test org.junit.runner.JUnitCore ExecutionTest TlsTest
+      run: java -cp .:lib/*:TP1/src/main:TP1/src/test org.junit.runner.JUnitCore test.ExecutionTest test.TlsTest
 
