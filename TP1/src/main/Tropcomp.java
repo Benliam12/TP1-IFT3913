@@ -89,16 +89,20 @@ public class Tropcomp {
         }
     }
 
+    /**
+     * Get the FileData that are suspicious. Which means, their Tloc and Tcmp are above a certain value
+     * @param input Original List of FileData
+     * @param tloc Tloc lower threshold
+     * @param tcmp Tcmp lower threshold
+     * @return New list with FileData with Tloc and Tcmp above thresholds
+     */
     public static ArrayList<FileData> GetComp(ArrayList<FileData> input, int tloc, float tcmp){
-
         ArrayList<FileData> output = new ArrayList<>();
-
         for(FileData file: input){
-            if(file.getTloc() > tloc && file.getTcmp() > tcmp){
+            if(file.getTloc() >= tloc && file.getTcmp() >= tcmp){
                 output.add(file);
             }
         }
-
         return output;
     }
 }

@@ -88,18 +88,20 @@ public class Tls {
         return new FileData(relativePath,packageName,className,tloc,tassert,tcmp);
     }
 
-    public static void writeToFile(ArrayList<FileData> data, String path){
+    public static boolean writeToFile(ArrayList<FileData> data, String path, boolean display){
         File f = new File(path);
         if(f.isDirectory()){
-            System.out.println("The output file cannot be a directory!");
-            exit(0);
+            if(display)
+                System.out.println("The output file cannot be a directory!");
+            return false;
         }
         else if(!f.exists()) {
             try{
                 f.createNewFile();
             } catch (IOException e){
-                System.out.println("Error, cannot create the output file!");
-                exit(0);
+                if(display)
+                    System.out.println("Error, cannot create the output file!");
+                return false;
             }
         }
 
@@ -113,12 +115,18 @@ public class Tls {
             }
             bufferedWriter.close();
             fileWriter.close();
-            System.out.println("Data exported!");
-            exit(0);
+            if(display)
+                System.out.println("Data exported!");
+            return true;
         } catch (IOException e){
-            System.out.println("Error while exporting data in the output file! " + e.getMessage());
-            exit(0);
+            if(display)
+                System.out.println("Error while exporting data in the output file! " + e.getMessage());
+            return false;
         }
+    }
+
+    public static void writeToFile(ArrayList<FileData> data, String path){
+       writeToFile(data,path,true);
     }
 
     public static String getPackageName(ArrayList<String> fileCleanData){

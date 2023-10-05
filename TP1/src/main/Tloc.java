@@ -63,6 +63,7 @@ public class Tloc {
                     }
                 }
             }
+            scanner.close();
         } catch (FileNotFoundException e) {
             return strings;
         }
