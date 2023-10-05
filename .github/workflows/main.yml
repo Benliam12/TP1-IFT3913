@@ -23,12 +23,19 @@ jobs:
 
     - name: Clone JFreeChart repository at the same level
       run: git clone https://github.com/jfree/jfreechart.git ../jfreechart-master
+      
+      - name: Download JUnit JAR files
+      run: |
+        mkdir -p lib
+        curl -L -o lib/junit-4.13.2.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+        curl -L -o lib/hamcrest-core-1.3.jar https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+
     
     - name: Compile Java code
-      run: javac -cp .:TP1/src/main TP1/src/main/*.java
+      run: javac -cp .:TP1/src/main:lib/* TP1/src/main/*.java
 
     - name: Compile JUnit test code
-      run: javac -cp . TP1/src/test/*.java
+      run: javac -cp .:TP1/src/main:lib/*:TP1/src/test TP1/src/test/*.java
 
     - name: Run JUnit tests
-      run: java -cp .:src/test org.junit.runner.JUnitCore ExecutionTest TlsTest  
+      run: java -cp .:TP1/src/main:lib/*:src/test org.junit.runner.JUnitCore ExecutionTest TlsTest  
