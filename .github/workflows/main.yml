@@ -18,6 +18,7 @@ jobs:
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
+        distribution: 'zulu' # See 'Supported distributions' for available options
         java-version: '17'
 
     - name: Clone JFreeChart repository at the same level
