@@ -18,8 +18,7 @@ public class Tloc {
         }
 
         File file = new File(args[0]);
-        if(file.exists())
-        {
+        if(file.exists()) {
             if(file.isDirectory()){
                 System.out.println("Programs only supports single file.");
             }
@@ -35,7 +34,7 @@ public class Tloc {
 
     /**
      * Removes comments from the file.
-     * @param f
+     * @param f File to scan
      */
     public static ArrayList<String> commentRemover(File f){
 
@@ -49,7 +48,7 @@ public class Tloc {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 //Check if line it not just spaces.
-                if(line.trim().length() > 0){
+                if(!line.trim().isEmpty()){
                     //Check normal comment
                     if(line.trim().matches("^\\/\\*(.*)$") && !line.trim().matches("(.)*\\*\\/")){
                         multiline=true;
