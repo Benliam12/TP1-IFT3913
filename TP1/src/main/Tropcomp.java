@@ -57,8 +57,6 @@ public class Tropcomp {
 
     public static void processTropComp(File file, String outputPath, float threshold){
         if(file.exists()) {
-            System.out.println("Scanning the files...");
-
             ArrayList<Integer> tloc = new ArrayList<>();
             ArrayList<Float> tcmp = new ArrayList<>();
             ArrayList<FileData> files = new ArrayList<>();
@@ -68,12 +66,12 @@ public class Tropcomp {
             Collections.sort(tloc);
             Collections.sort(tcmp);
 
-            int seulTloc = tloc.get((int) Math.floor((1-threshold)*tloc.size()));
-            float seultcmp = tcmp.get((int) Math.floor((1-threshold)*tcmp.size()));
+            int seuilTloc = tloc.get((int) Math.floor((1-threshold)*tloc.size()));
+            float seuilTcmp = tcmp.get((int) Math.floor((1-threshold)*tcmp.size()));
 
-            System.out.println("TLOC : "+ seulTloc + " - TCMP: "+ seultcmp);
+            System.out.println("TLOC : "+ seuilTloc + " - TCMP: "+ seuilTcmp);
 
-            ArrayList<FileData> tropcompFile = GetComp(files,seulTloc,seultcmp);
+            ArrayList<FileData> tropcompFile = GetComp(files,seuilTloc,seuilTcmp);
 
             if(outputPath != null){
                 Tls.writeToFile(tropcompFile, outputPath);

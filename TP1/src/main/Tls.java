@@ -37,7 +37,6 @@ public class Tls {
 
         File file = new File(path);
         if(file.exists()) {
-            System.out.println("Scanning the files...");
             ArrayList<FileData> fileData = new ArrayList<FileData>();
             tls(file,fileData);
             if(outputPath != null){
@@ -101,7 +100,7 @@ public class Tls {
                 f.createNewFile();
             } catch (IOException e){
                 if(display)
-                    System.out.println("Error, cannot create the output file!");
+                    System.out.println("Error, cannot create the output file! " + e.getMessage());
                 return false;
             }
         }
