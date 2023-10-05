@@ -1,10 +1,10 @@
+package main;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Struct;
 import java.util.ArrayList;
-import java.util.List;
 
 import static java.lang.System.exit;
 
@@ -35,48 +35,17 @@ public class Tls {
             exit(0);
         }
 
-
         File file = new File(path);
-        ArrayList<String> data = new ArrayList<>();
         if(file.exists()) {
             System.out.println("Scanning the files...");
-            tls(file,data);
+            ArrayList<FileData> fileData = new ArrayList<FileData>();
+            tls(file,fileData);
             if(outputPath != null){
-                File f = new File(outputPath);
-                if(f.isDirectory()){
-                    System.out.println("The output file cannot be a directory!");
-                    exit(0);
-                }
-                else if(!f.exists()) {
-                    try{
-                        f.createNewFile();
-                    } catch (IOException e){
-                        System.out.println("Error, cannot create the output file!");
-                        exit(0);
-                    }
-                }
-
-                try{
-                    FileWriter fileWriter = new FileWriter(f);
-                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-                    for (String line : data) {
-                        bufferedWriter.write(line);
-                        bufferedWriter.newLine();
-                    }
-                    bufferedWriter.close();
-                    fileWriter.close();
-                    System.out.println("Data exported!");
-                    exit(0);
-                } catch (IOException e){
-                    System.out.println("Error while exporting data in the output file! " + e.getMessage());
-                    exit(0);
-                }
-
+                writeToFile(fileData, outputPath);
             }
             else{
-                for(String s: data)
-                    System.out.println(s);
+                for(FileData data: fileData)
+                    System.out.println(data.toString());
             }
         }
         else{
@@ -85,14 +54,14 @@ public class Tls {
         }
     }
 
-    public static void tls(File f, ArrayList<String> output){
-        tls(f, output, new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+    public static void tls(File f,ArrayList<FileData> fileDataOutput){
+        tls(f, fileDataOutput,new ArrayList<>(),new ArrayList<>());
     }
 
-    public static void tls(File f, ArrayList<String> output,ArrayList<FileData> fileData, ArrayList<Integer> tloc, ArrayList<Float> tcmp){
+    public static void tls(File f, ArrayList<FileData> fileData, ArrayList<Integer> tloc, ArrayList<Float> tcmp){
         if(f.isDirectory()){
             for(String s: f.list()){
-                tls(new File(f.getPath() + "/" + s), output,fileData, tloc, tcmp);
+                tls(new File(f.getPath() + "/" + s),fileData, tloc, tcmp);
             }
         }
         else{
@@ -102,7 +71,6 @@ public class Tls {
                 tloc.add(info.getTloc());
                 tcmp.add(info.getTcmp());
                 fileData.add(info);
-                output.add(info.toString());
             }
         }
     }
@@ -118,6 +86,39 @@ public class Tls {
         int tassert = Tassert.countAssert(cleanCode);
         float tcmp = (float) Math.floor(100f * tloc/tassert) / 100f;
         return new FileData(relativePath,packageName,className,tloc,tassert,tcmp);
+    }
+
+    public static void writeToFile(ArrayList<FileData> data, String path){
+        File f = new File(path);
+        if(f.isDirectory()){
+            System.out.println("The output file cannot be a directory!");
+            exit(0);
+        }
+        else if(!f.exists()) {
+            try{
+                f.createNewFile();
+            } catch (IOException e){
+                System.out.println("Error, cannot create the output file!");
+                exit(0);
+            }
+        }
+
+        try{
+            FileWriter fileWriter = new FileWriter(f);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            for (FileData filedata : data) {
+                bufferedWriter.write(filedata.toString());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+            fileWriter.close();
+            System.out.println("Data exported!");
+            exit(0);
+        } catch (IOException e){
+            System.out.println("Error while exporting data in the output file! " + e.getMessage());
+            exit(0);
+        }
     }
 
     public static String getPackageName(ArrayList<String> fileCleanData){

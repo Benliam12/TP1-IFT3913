@@ -1,3 +1,5 @@
+package main;
+
 import org.junit.Assert;
 
 import java.io.File;

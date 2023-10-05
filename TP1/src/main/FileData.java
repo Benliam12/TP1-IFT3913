@@ -1,3 +1,5 @@
+package main;
+
 public class FileData {
     private String path;
     private String packageName;

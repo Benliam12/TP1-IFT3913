@@ -1,10 +1,7 @@
-import java.io.BufferedWriter;
+package main;
+
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 import static java.lang.System.exit;
@@ -20,14 +17,28 @@ public class Tropcomp {
         String path = ".";
         String outputPath = null;
 
-        float seuil = 0.10f;
+        float seuil = 1.00f;
 
-        if(args.length == 1) {
+        if(args.length == 2) {
             path = args[0];
-        }else if(args.length == 3){
+            try{
+                seuil = Float.parseFloat(args[1]);
+                seuil /=100;
+            } catch(NumberFormatException e){
+                System.out.println("Invalid threshold number!");
+                exit(0);
+            }
+        }else if(args.length == 4){
             if(args[0].equalsIgnoreCase("-o")){
                 path = args[2];
                 outputPath = args[1];
+                try{
+                    seuil = Float.parseFloat(args[3]);
+                    seuil /=100;
+                } catch(NumberFormatException e){
+                    System.out.println("Invalid threshold number!");
+                    exit(0);
+                }
             }
             else{
                 System.out.println("Incorrect arguments!");
@@ -39,59 +50,33 @@ public class Tropcomp {
             exit(0);
         }
 
-
         File file = new File(path);
-        ArrayList<String> data = new ArrayList<>();
+        processTropComp(file, outputPath, seuil);
+    }
+
+
+    public static void processTropComp(File file, String outputPath, float threshold){
         if(file.exists()) {
             System.out.println("Scanning the files...");
 
             ArrayList<Integer> tloc = new ArrayList<>();
             ArrayList<Float> tcmp = new ArrayList<>();
             ArrayList<FileData> files = new ArrayList<>();
-            Tls.tls(file,data,files,tloc,tcmp);
+
+            Tls.tls(file,files,tloc,tcmp);
 
             Collections.sort(tloc);
             Collections.sort(tcmp);
 
-            int seulTloc = tloc.get((int) Math.floor((1-seuil)*tloc.size()));
-            float seultcmp = tcmp.get((int) Math.floor((1-seuil)*tcmp.size()));
+            int seulTloc = tloc.get((int) Math.floor((1-threshold)*tloc.size()));
+            float seultcmp = tcmp.get((int) Math.floor((1-threshold)*tcmp.size()));
 
             System.out.println("TLOC : "+ seulTloc + " - TCMP: "+ seultcmp);
 
             ArrayList<FileData> tropcompFile = GetComp(files,seulTloc,seultcmp);
 
             if(outputPath != null){
-                File f = new File(outputPath);
-                if(f.isDirectory()){
-                    System.out.println("The output file cannot be a directory!");
-                    exit(0);
-                }
-                else if(!f.exists()) {
-                    try{
-                        f.createNewFile();
-                    } catch (IOException e){
-                        System.out.println("Error, cannot create the output file!");
-                        exit(0);
-                    }
-                }
-
-                try{
-                    FileWriter fileWriter = new FileWriter(f);
-                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-                    for (FileData fileData : tropcompFile) {
-                        bufferedWriter.write(fileData.toString());
-                        bufferedWriter.newLine();
-                    }
-                    bufferedWriter.close();
-                    fileWriter.close();
-                    System.out.println("Data exported!");
-                    exit(0);
-                } catch (IOException e){
-                    System.out.println("Error while exporting data in the output file! " + e.getMessage());
-                    exit(0);
-                }
-
+                Tls.writeToFile(tropcompFile, outputPath);
             }
             else{
                 for (FileData fileData : tropcompFile)
