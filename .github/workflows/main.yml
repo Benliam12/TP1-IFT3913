@@ -32,11 +32,14 @@ jobs:
 
       
     - name: Compile Java code
-      run: javac -cp .:TP1/src/main:lib/* TP1/src/main/*.java
+      working-directory: TP1
+      run: javac -cp .:src/main:../lib/* src/main/*.java
 
     - name: Compile JUnit test code
-      run: javac -cp .:lib/*:TP1/src TP1/src/test/*.java
+      working-directory: TP1
+      run: javac -cp .:../lib/* src/test/*.java
 
     - name: Run JUnit tests
-      run: java -cp .:lib/*:TP1/src/main:TP1/src/test org.junit.runner.JUnitCore test.ExecutionTest test.TlsTest
+      working-directory: TP1
+      run: java -cp .:../lib/*:src/main:src/test org.junit.runner.JUnitCore test.ExecutionTest test.TlsTest
 
