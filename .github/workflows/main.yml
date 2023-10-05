@@ -23,7 +23,10 @@ jobs:
 
     - name: Clone JFreeChart repository at the same level
       run: git clone https://github.com/jfree/jfreechart.git ../jfreechart-master
-
+    
+    - name: Run random LS
+      run: ls
+    
     - name: Compile Java code
       run: javac -cp .:TP1-IFT3913/src/main TP1-IFT3913/src/main/*.java
 
