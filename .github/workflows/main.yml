@@ -36,8 +36,7 @@ jobs:
       run: javac -cp .:src/main:../lib/* src/main/*.java
 
     - name: Compile JUnit test code
-      working-directory: TP1
-      run: javac -cp .:../lib/* src/test/*.java
+      run: javac -cp .:lib/*:TP1/src TP1/src/test/*.java
 
     - name: Run JUnit tests
       working-directory: TP1
