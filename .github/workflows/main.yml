@@ -1,0 +1,32 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: 17
+
+    - name: Clone JFreeChart repository at the same level
+      run: git clone https://github.com/jfree/jfreechart.git ../jfreechart-master
+
+    - name: Compile Java code
+      run: javac -cp . src/main/*.java 
+
+    - name: Compile JUnit test code
+      run: javac -cp . src/test/*.java
+
+    - name: Run JUnit tests
+      run: java -cp .:src/test org.junit.runner.JUnitCore ExecutionTest TlsTest  
