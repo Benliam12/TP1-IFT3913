@@ -68,16 +68,20 @@ public class Tls {
             //Process each file that was found.
             if(f.getName().matches("^(.)*\\.java$")){
                 FileData info = getFileInfo(f);
-                tloc.add(info.getTloc());
-                tcmp.add(info.getTcmp());
-                fileData.add(info);
+                if(info.getTassert() > 0){
+                    tloc.add(info.getTloc());
+                    tcmp.add(info.getTcmp());
+                    fileData.add(info);
+                }
+                else{
+                    System.out.println(info.toString());
+                }
             }
         }
     }
 
     public static FileData getFileInfo(File f){
         ArrayList<String> cleanCode = Tloc.commentRemover(f);
-        String csvInfo = "";
         String relativePath = f.getPath();
         String packageName = getPackageName(cleanCode);
         String className = f.getName().replace(".java","");

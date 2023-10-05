@@ -1,25 +1,29 @@
 package test;
 
 import main.FileData;
-import main.Tloc;
 import main.Tls;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import static java.lang.System.exit;
+
 public class TlsTest {
-    @Before
-    public void init(){
+
+    private static ArrayList<FileData> fileData = new ArrayList<>();
+    @BeforeClass
+    public static void init(){
         File f = new File("output.csv");
         if(f.exists()){
             if(!f.delete()){
                 System.out.println("Error on Tls init method!");
+                exit(0);
             }
         }
+
+        File target = new File("../../jfreechart-master/src/test/");
+        Tls.tls(target, fileData);
     }
 
     @Test
@@ -42,8 +46,20 @@ public class TlsTest {
         Assert.assertTrue(f.exists());
     }
 
-    @After
-    public void clean(){
+    @Test
+    public void FileDetectionTest(){
+        Assert.assertEquals(349, fileData.size());
+    }
+
+    @Test
+    public void ExtensionTest(){
+        for(FileData file : fileData){
+            Assert.assertTrue(file.getPath().matches("(.*)\\.java"));
+        }
+    }
+
+    @AfterClass
+    public static void clean(){
         File f = new File("output.csv");
         if(f.exists()){
             if(!f.delete()){
