@@ -25,10 +25,10 @@ jobs:
       run: git clone https://github.com/jfree/jfreechart.git ../jfreechart-master
 
     - name: Compile Java code
-      run: javac -cp . src/main/*.java 
+      run: javac -cp .:TP1-IFT3913/src/main TP1-IFT3913/src/main/*.java
 
     - name: Compile JUnit test code
-      run: javac -cp . src/test/*.java
+      run: javac -cp . TP1-IFT3913/src/test/*.java
 
     - name: Run JUnit tests
       run: java -cp .:src/test org.junit.runner.JUnitCore ExecutionTest TlsTest  
