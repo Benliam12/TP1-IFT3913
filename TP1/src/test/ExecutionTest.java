@@ -60,14 +60,14 @@ public class ExecutionTest {
     }
     @Test
     public void ExecuteTAssertNoPath() throws IOException {
-        ArrayList<String> data = executeJar("java -jar ../jarfiles/tassert.jar");
+        ArrayList<String> data = executeJar("java -jar "+ajuster+"jarfiles/tassert.jar");
         Assert.assertFalse(data.isEmpty());
         Assert.assertEquals("Please provide a path!", data.get(0));
     }
 
     @Test
     public void ExecuteTls() throws IOException {
-        ArrayList<String> lineData = executeJar("java -jar "+ajuster+"jarfiles/tls.jar "+ajuster+"jfreechart-master/src/test/");
+        ArrayList<String> lineData = executeJar("java -jar "+ajuster+"jarfiles/Tls.jar "+ajuster+"jfreechart-master/src/test/");
         Assert.assertEquals(350, lineData.size());
 
     }
