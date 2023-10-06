@@ -12,6 +12,15 @@ import static java.lang.System.exit;
 public class TlsTest {
 
     private static ArrayList<FileData> fileData = new ArrayList<>();
+
+    private static String ajuster = "../";
+    @BeforeClass
+    public static void setAjuster(){
+        File f = new File("../jarfiles/tloc.jar");
+        if(!f.exists()){
+            ajuster = "";
+        }
+    }
     @BeforeClass
     public static void init(){
         File f = new File("output.csv");
@@ -22,13 +31,13 @@ public class TlsTest {
             }
         }
 
-        File target = new File("../../jfreechart-master/src/test/");
+        File target = new File(ajuster + "jfreechart-master/src/test/");
         Tls.tls(target, fileData);
     }
 
     @Test
     public void PDFExampleTest(){
-        File f = new File("../../jfreechart-master/src/test/java/org/jfree/chart/title/TitleTest.java");
+        File f = new File(ajuster + "jfreechart-master/src/test/java/org/jfree/chart/title/TitleTest.java");
         FileData fileData = Tls.getFileInfo(f);
         Assert.assertEquals(39, fileData.getTloc());
         Assert.assertEquals(11, fileData.getTassert());
@@ -38,7 +47,7 @@ public class TlsTest {
 
     @Test
     public void ExportTestFile(){
-        File target = new File("../../jfreechart-master/src/test/java/org/jfree/chart/title/TitleTest.java");
+        File target = new File(ajuster+"jfreechart-master/src/test/java/org/jfree/chart/title/TitleTest.java");
         ArrayList<FileData> data = new ArrayList<>();
         Tls.tls(target, data);
         Tls.writeToFile(data, "output.csv",false);
