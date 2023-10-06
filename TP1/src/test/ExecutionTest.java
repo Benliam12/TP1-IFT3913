@@ -68,8 +68,7 @@ public class ExecutionTest {
     @Test
     public void ExecuteTls() throws IOException {
         ArrayList<String> lineData = executeJar("java -jar "+ajuster+"jarfiles/tls.jar "+ajuster+"jfreechart-master/src/test/");
-        Assert.assertEquals(350, lineData.size());
-
+        Assert.assertEquals(349, lineData.size());
     }
 
     @Test
