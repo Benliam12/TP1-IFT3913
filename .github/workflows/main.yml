@@ -40,5 +40,5 @@ jobs:
 
     - name: Run JUnit tests
       working-directory: TP1
-      run: java -cp .:../lib/*:src/main:src/test org.junit.runner.JUnitCore ExecutionTest TlsTest
+      run: java -cp .:../lib/*:src:src/main:src/test org.junit.runner.JUnitCore test.ExecutionTest test.TlsTest
 
