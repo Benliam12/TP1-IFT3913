@@ -19,7 +19,8 @@ public class ExecutionTest {
         f = new File("../jarfiles/tloc.jar");
         System.out.println(f.getAbsolutePath() + " - " + f.exists());
 
-        ArrayList<String> ok = executeJar("cd ../../ && ls");
+        ArrayList<String> ok;
+        ok = executeJar("cd ../ && ls");
         for(String s: ok){
             System.out.println(s);
         }
