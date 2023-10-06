@@ -20,12 +20,18 @@ public class ExecutionTest {
         System.out.println(f.getAbsolutePath() + " - " + f.exists());
 
         ArrayList<String> ok;
+
         ok = executeJar("ls");
         for(String s: ok){
             System.out.println(s);
         }
 
-        ok = executeJar("cd ../ && ls");
+        ok = executeJar("cd .. && ls");
+        for(String s: ok){
+            System.out.println(s);
+        }
+
+        ok = executeJar("cd .. && ls");
         for(String s: ok){
             System.out.println(s);
         }
@@ -119,6 +125,7 @@ public class ExecutionTest {
                 output.add(line.trim());
             }
         } catch (IOException e){
+            System.out.println(e.getMessage());
         }
         return output;
     }
