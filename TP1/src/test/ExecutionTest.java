@@ -12,6 +12,11 @@ import java.util.ArrayList;
 
 public class ExecutionTest {
     @Test
+    public void RepoTest(){
+        File f = new File("haha.txt");
+        System.out.println(f.getAbsolutePath());
+    }
+    @Test
     public void ExecuteTloc() throws IOException {
         ArrayList<String> data = executeJar("java -jar ../jarfiles/tloc.jar ../../jfreechart-master/src/test/java/org/jfree/chart/title/TitleTest.java");
         Assert.assertFalse(data.isEmpty());
