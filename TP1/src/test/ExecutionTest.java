@@ -15,6 +15,14 @@ public class ExecutionTest {
     public void RepoTest(){
         File f = new File("haha.txt");
         System.out.println(f.getAbsolutePath());
+
+        f = new File("../jarfiles/tloc.jar");
+        System.out.println(f.getAbsolutePath() + " - " + f.exists());
+
+        ArrayList<String> ok = executeJar("cd ../../ && ls");
+        for(String s: ok){
+            System.out.println(s);
+        }
     }
     @Test
     public void ExecuteTloc() throws IOException {
